@@ -136,32 +136,45 @@ if __name__ == "__main__":
 
 
 
-
+        blanck6 = blanck_picture(img)
         for x in range(0, blanck4.shape[1], size):
             for y in range(0, blanck4.shape[0], size):
-                crop = blanck4[y:y+50, x:x+50]
-                crop = make_line(crop, 2, 0)
-                gray_crop = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+
+                try:
+                    crop = blanck4[y:y+50, x:x+50]
+                    crop = make_line(crop, 2, 0)
+                    gray_crop = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+
+                    crop1 = blanck4[y-50:y, x-50:x]
+                    crop1 = make_line(crop1, 2, 0)
+                    gray_crop1 = cv2.cvtColor(crop1, cv2.COLOR_BGR2GRAY)
+
+                    crop2 = blanck4[y+50:y+100, x+50:x+100]
+                    crop2 = make_line(crop2, 2, 0)
+                    gray_crop2 = cv2.cvtColor(crop2, cv2.COLOR_BGR2GRAY)
 
 
-                blanck5 = blanck_picture(crop)
+                    c = 0
+                    c1 = 0
+                    for x_crop in range(0, crop.shape[1]):
+                        for y_crop in range(0, crop.shape[0]):
+                            if gray_crop1[x_crop, y_crop] != 0:   
+                                c+=1
+                            if gray_crop2[x_crop, y_crop] != 0:
+                                c1+=1
+                    print(c, c1)
 
-                contours, _ = cv2.findContours(gray_crop, R, P)
- 
-                for cnts in contours:
-                    print(cv2.contourArea(cnts))
-                    if cv2.contourArea(cnts):
-                        cv2.drawContours(blanck5, [cnts], -1, (255,255,255), 1)
-                        show_picture("blanck5", blanck5, 0, "")
-
-
-
-
-
-
-
+                    if c == 0 and c1 == 0:
+                        pass
+                    else:
+                        blanck6[y:y+size, x:x+size] = crop
 
 
+                except:
+                    pass
+
+
+        show_picture("blanck6", blanck6, 0, "")
 
 #iscontourconvexe roue
 
