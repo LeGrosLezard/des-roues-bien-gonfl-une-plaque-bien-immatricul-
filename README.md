@@ -1,6 +1,19 @@
 # des-roues-bien-gonflé-une-plaque-bien-immatriculé-
 
-il faut bien détourer l'objet n'importe quelle type d'image
+pcque mon premier truk ca marche hyper bien mais que pour la premiere et avec un thresh
+
+mais pour les autre bonjour
+
+
+
+
+
+
+
+
+
+
+
 
 <br><br><br><br><br><br><br><br><br><br><br>
 
