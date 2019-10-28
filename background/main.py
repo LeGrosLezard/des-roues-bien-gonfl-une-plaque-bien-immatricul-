@@ -103,20 +103,56 @@ if __name__ == "__main__":
                 blanck_th = blanck_picture(crop)
 
 
-                contours, _ =cv2.findContours(crop, R, P)
-
+                contours, _ = cv2.findContours(crop, R, P)
 
 
                 for cnt in contours:
                     if cv2.contourArea(cnt) < 1500 and\
                        cv2.contourArea(cnt) > 200:
-                        cv2.drawContours(blanck_th,[cnt], -1, (0,255,0), 1)
-
-
-                        show_picture("blanck_th", blanck_th, 0, "")
+                        cv2.drawContours(blanck_th,[cnt], -1, (255,255,255), 1)
+                        #cv2.fillPoly(blanck_th, pts =[cnt], color=(255, 255, 255))
+                        #show_picture("blanck_th", blanck_th, 0, "")
 
                 blanck_th3[y:y+50, x:x+50] = blanck_th
-                show_picture("blanck_th3", blanck_th3, 0, "")
+
+                #show_picture("blanck_th3", blanck_th3, 0, "")
+
+
+        #show_picture("blanck_th3", blanck_th3, 0, "")
+
+        blanck4 = blanck_picture(blanck_th3)
+        gray = cv2.cvtColor(blanck_th3, cv2.COLOR_BGR2GRAY)
+
+        contours, _ = cv2.findContours(gray, R, P)
+
+
+        for cnts in contours:
+            if cv2.contourArea(cnts) > 250:
+                #print(cv2.contourArea(cnts))
+                cv2.drawContours(blanck4, [cnts], -1, (255,255,255), 1)
+                #show_picture("blanck4", blanck4, 0, "")
+
+        show_picture("blanck4", blanck4, 0, "")
+
+
+
+
+        for x in range(0, blanck4.shape[1], size):
+            for y in range(0, blanck4.shape[0], size):
+                crop = blanck4[y:y+50, x:x+50]
+                crop = make_line(crop, 2, 0)
+                gray_crop = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
+
+
+                blanck5 = blanck_picture(crop)
+
+                contours, _ = cv2.findContours(gray_crop, R, P)
+ 
+                for cnts in contours:
+                    print(cv2.contourArea(cnts))
+                    if cv2.contourArea(cnts):
+                        cv2.drawContours(blanck5, [cnts], -1, (255,255,255), 1)
+                        show_picture("blanck5", blanck5, 0, "")
 
 
 
@@ -125,6 +161,9 @@ if __name__ == "__main__":
 
 
 
+
+
+#iscontourconvexe roue
 
 
 
