@@ -3,6 +3,7 @@ import cv2
 import sys
 sys.path.append(r"C:\Users\jeanbaptiste\Desktop\assiette\v2\main")
 
+import imutils
 import numpy as np
 
 path_folder_image = "image/"
@@ -88,7 +89,7 @@ if __name__ == "__main__":
         th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,5)
         th3 = make_line(th3, 10, 255)
 
-        show_picture("th3", th3, 0, "")
+        #show_picture("th3", th3, 0, "")
 
 
         size = 50
@@ -132,7 +133,7 @@ if __name__ == "__main__":
                 cv2.drawContours(blanck4, [cnts], -1, (255,255,255), 1)
                 #show_picture("blanck4", blanck4, 0, "")
 
-        show_picture("blanck4", blanck4, 0, "")
+        #show_picture("blanck4", blanck4, 0, "")
 
 
 
@@ -154,15 +155,14 @@ if __name__ == "__main__":
                     gray_crop2 = cv2.cvtColor(crop2, cv2.COLOR_BGR2GRAY)
 
 
-                    c = 0
-                    c1 = 0
+                    c = 0; c1 = 0;
                     for x_crop in range(0, crop.shape[1]):
                         for y_crop in range(0, crop.shape[0]):
                             if gray_crop1[x_crop, y_crop] != 0:   
                                 c+=1
                             if gray_crop2[x_crop, y_crop] != 0:
                                 c1+=1
-                    print(c, c1)
+    
 
                     if c == 0 and c1 == 0:
                         pass
@@ -174,7 +174,58 @@ if __name__ == "__main__":
                     pass
 
 
-        show_picture("blanck6", blanck6, 0, "")
+        #show_picture("blanck6", blanck6, 0, "")
+
+        gray = cv2.cvtColor(blanck6, cv2.COLOR_BGR2GRAY)
+        th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,2)
+
+        contours, _ = cv2.findContours(th3, R, P)
+
+        maxi = 0
+        for cnts in contours:
+            if cv2.contourArea(cnts) > maxi:
+                maxi = cv2.contourArea(cnts)
+
+        blanck7 = blanck_picture(img)
+        blanck7 = cv2.cvtColor(blanck7, cv2.COLOR_BGR2GRAY)
+        maxi2 = 0
+        for cnts in contours:
+            if cv2.contourArea(cnts) < maxi and\
+             cv2.contourArea(cnts) > maxi2:
+                maxi2 = cv2.contourArea(cnts)
+
+        for cnts in contours:
+            if cv2.contourArea(cnts) == maxi2:
+                x, y, w, h = cv2.boundingRect(cnts)
+                blanck7[y:y+h, x:x+w] = 255
+
+
+        for x in range(0, blanck7.shape[0]):
+            for y in range(0, blanck7.shape[1]):
+                if blanck7[x, y] == 255:
+                    pass
+                else:
+                    img[x, y] = 0
+
+        show_picture("img", img, 0, "")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #iscontourconvexe roue
 
