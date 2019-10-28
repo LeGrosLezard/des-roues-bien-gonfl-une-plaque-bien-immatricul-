@@ -6,6 +6,11 @@ sys.path.append(r"C:\Users\jeanbaptiste\Desktop\assiette\v2\main")
 import imutils
 import numpy as np
 
+
+
+
+
+
 path_folder_image = "image/"
 path_image = "image/{}"
 
@@ -56,7 +61,7 @@ def make_line(thresh, size, color):
 
 if __name__ == "__main__":
 
-
+    cc = 0
     MM = cv2.ADAPTIVE_THRESH_MEAN_C
     MG = cv2.ADAPTIVE_THRESH_GAUSSIAN_C
     T = cv2.THRESH_BINARY
@@ -105,8 +110,6 @@ if __name__ == "__main__":
 
 
                 contours, _ = cv2.findContours(crop, R, P)
-
-
                 for cnt in contours:
                     if cv2.contourArea(cnt) < 1500 and\
                        cv2.contourArea(cnt) > 200:
@@ -162,7 +165,6 @@ if __name__ == "__main__":
                                 c+=1
                             if gray_crop2[x_crop, y_crop] != 0:
                                 c1+=1
-    
 
                     if c == 0 and c1 == 0:
                         pass
@@ -207,11 +209,13 @@ if __name__ == "__main__":
                 else:
                     img[x, y] = 0
 
-        show_picture("img", img, 0, "")
 
 
+        cv2.imshow("dsq", img)
+        cv2.waitKey(0)
+        cv2.imwrite("image" + str(cc) + ".jpg", img)
 
-
+        cc += 1
 
 
 
