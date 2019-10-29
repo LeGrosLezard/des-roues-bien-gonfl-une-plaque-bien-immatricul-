@@ -131,7 +131,7 @@ if __name__ == "__main__":
                 cv2.drawContours(blanck2,[cnts],-1,(255,255,255), 1)
                 cv2.fillPoly(blanck2, pts =[cnts], color=(255, 255, 255))
 
-        show_picture("blanck2", blanck2, 0, "")
+        #show_picture("blanck2", blanck2, 0, "")
 
 
         for x in range(0, blanck2.shape[0]):
@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
         copy = cv2.cvtColor(copy, cv2.COLOR_BGR2GRAY)
         th3 = cv2.adaptiveThreshold(copy, 255, MG, T,11,5)
-        show_picture("copycopycopy", th3, 0, "")
+        #show_picture("copycopycopy", th3, 0, "")
 
 
         blanck3 = blanck_picture(img)
@@ -152,14 +152,67 @@ if __name__ == "__main__":
             if cv2.contourArea(cnt) > maxi:
                 maxi = cv2.contourArea(cnt)
 
-        
+        liste_contoursX = []
+        liste_contoursY = []
+        liste_contoursW = []
+        liste_contoursH = []
+
+        copy1 = img.copy()
         for cnts in contours:
             if cv2.contourArea(cnts) != maxi and\
                cv2.contourArea(cnts) > 10:
-                print(cv2.contourArea(cnts))
+                #print(cv2.contourArea(cnts))
                 cv2.drawContours(blanck3,[cnts],-1,(255,255,255), 1)
                 (x, y, w, h) = cv2.boundingRect(cnts)
                 #print(x, y, w, h)
-                show_picture("blanck3", blanck3, 0, "")
+                if y+h > 100 and w > 50:
+                    pass
+                else:
+                    for b in range(y, y+h):
+                        for a in range(x, x+w):
+                            blanck3[b, a] = 0
+
+        #show_picture("blanck3", blanck3, 0, "")
+
+
+        gray = cv2.cvtColor(blanck3, cv2.COLOR_BGR2GRAY)
+        th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,5)
+
+        blanck4 = blanck_picture(img)
+        contours, _ = cv2.findContours(th3, R, P)
+
+
+        maxi = 0
+        for cnt in contours:
+            if cv2.contourArea(cnt) > maxi:
+                maxi = cv2.contourArea(cnt)
+
+
+        for cnts in contours:
+            if cv2.contourArea(cnts) > 2000 and\
+               cv2.contourArea(cnts) != maxi:
+                #print(cv2.contourArea(cnts))
+                cv2.drawContours(blanck4,[cnts],-1,(255,255,255), 1)
+                cv2.fillPoly(blanck4, pts =[cnts], color=(255, 255, 255))
+
+        #show_picture("blanck4", blanck4, 0, "")
+
+
+
+        for x in range(0, blanck4.shape[0]):
+            for y in range(0, blanck4.shape[1]):
+                if blanck4[x, y][0] == 0 and\
+                   blanck4[x, y][1] == 0 and\
+                   blanck4[x, y][2] == 0:
+                    img[x,y] = 0, 0, 0
+
+
+        show_picture("img", img, 0, "")
+        cv2.imwrite("image_treated" + "/" + str(cc) + "image.png", img)
+
+        cc += 1
+
+
+
 
 
