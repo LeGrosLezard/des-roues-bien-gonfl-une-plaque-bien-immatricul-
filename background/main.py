@@ -56,6 +56,15 @@ def make_line(thresh, size, color):
 
 
 
+def adjust_gamma(image, gamma):
+    """We add light to the video, we play with gamma"""
+
+    invGamma = 1.0 / gamma
+    table = np.array([((i / 255.0) ** invGamma) * 255
+            for i in np.arange(0, 256)]).astype("uint8")
+
+    return cv2.LUT(image, table)
+
 
 
 if __name__ == "__main__":
@@ -77,36 +86,43 @@ if __name__ == "__main__":
         add_h = height % 10
 
         img = cv2.resize(img, (width*2 + add_w, height*2 + add_h))
-        blanck = blanck_picture(img)
+
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        blur = cv2.GaussianBlur(gray, (7, 7), 0)
-        th2 = cv2.adaptiveThreshold(blur, 255, MM, T , 11, 2)
-
-        show_picture("th2", th2, 0, "")
 
 
-        blanck = blanck_picture(img)
-        gray = cv2.cvtColor(blanck, cv2.COLOR_BGR2GRAY)
+        size = 100;
+        blanck1 = blanck_picture(img);
+        bloc = 1
+        for x in range(0, gray.shape[1], size):
+            for y in range(0, gray.shape[0], size):
 
-        contours, _ = cv2.findContours(th2, R, P)
+                crop = gray[y:y+size, x:x+size]
+
+                blanck = blanck_picture(crop); 
+                th3 = cv2.adaptiveThreshold(crop, 255, MG, T,11,5)
+
+                contours, _ = cv2.findContours(th3, R, P)
+                for cnts in contours:
+                    if cv2.contourArea(cnts) > 100:
+                        #print(cv2.contourArea(cnts))
+                        cv2.drawContours(blanck, [cnts], -1, (0,255,0), 1)
+
+                        #show_picture("blanck", blanck, 0, "")
+
+                        blanck = make_line(blanck, 5, 0)
+                        blanck1[y:y+size, x:x+size] = blanck
 
 
-        maxi = 0
-        for cnts in contours:
-            if cv2.contourArea(cnts) > maxi:
-                maxi = cv2.contourArea(cnts)
+                
 
-        copy = img.copy()
-        for cnts in contours:
-            if cv2.contourArea(cnts) != maxi and\
-               cv2.contourArea(cnts) > 1000:
-                print(cv2.contourArea(cnts))
-                cv2.fillPoly(blanck, pts =[cnts], color=(255, 255, 255))
-                (x, y, w, h) = cv2.boundingRect(cnts)
-                cv2.rectangle(copy, (x, y), (x+w, y+h), (0, 0, 255), 5)
-        show_picture("th2", blanck, 0, "")
-        show_picture("copy", copy, 0, "")
-        
+
+            bloc += 5
+        show_picture("blanck1", blanck1, 0, "")
+
+
+
+
+
 
 
 
