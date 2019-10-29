@@ -1,8 +1,10 @@
 # des-roues-bien-gonflé-une-plaque-bien-immatriculé-
 
-pcque mon premier truk ca marche hyper bien mais que pour la premiere et avec un thresh
+supprimer la route et le ciel ok
 
-mais pour les autre bonjour
+recuperer la couleur de la voiture et recupérer que la couleur
+
+
 
 
 
