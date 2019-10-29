@@ -109,15 +109,11 @@ if __name__ == "__main__":
         add_h = height % 10
 
         img = cv2.resize(img, (width*2 + add_w, height*2 + add_h))
-
-        color = main_color_background(img)
-        print(color)
+        copy = img.copy()
 
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,5)
         contours, _ = cv2.findContours(th3, R, P)
-
-        print(len(contours))
 
         maxi = 0
         for cnt in contours:
@@ -129,81 +125,41 @@ if __name__ == "__main__":
 
 
         for cnts in contours:
-            if cv2.contourArea(cnts) < maxi:
+            if cv2.contourArea(cnts) < maxi and\
+               cv2.contourArea(cnts) > 100:
                 #print(cv2.contourArea(cnt))
-                cv2.drawContours(blanck2,[cnts],-1,(255,0,0), 3)
-                cv2.fillPoly(blanck2, pts =[cnts], color=(0, 0, 255))
+                cv2.drawContours(blanck2,[cnts],-1,(255,255,255), 1)
+                cv2.fillPoly(blanck2, pts =[cnts], color=(255, 255, 255))
+
         show_picture("blanck2", blanck2, 0, "")
 
 
         for x in range(0, blanck2.shape[0]):
             for y in range(0, blanck2.shape[1]):
                 if blanck2[x, y] == 0:
-                    img[x,y] = 255, 255, 255
+                    copy[x,y] = 255, 255, 255
 
-        show_picture("img", img, 0, "")
-
-
-
-
+        copy = cv2.cvtColor(copy, cv2.COLOR_BGR2GRAY)
+        th3 = cv2.adaptiveThreshold(copy, 255, MG, T,11,5)
+        show_picture("copycopycopy", th3, 0, "")
 
 
+        blanck3 = blanck_picture(img)
+        contours, _ = cv2.findContours(th3, R, P)
 
+        maxi = 0
+        for cnt in contours:
+            if cv2.contourArea(cnt) > maxi:
+                maxi = cv2.contourArea(cnt)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##
-##        size = 50;
-##        blanck1 = blanck_picture(img);
-##
-##        for x in range(0, gray.shape[1], size):
-##            for y in range(0, gray.shape[0], size):
-##
-##
-##
-##                crop = gray[y:y+size, x:x+size]
-##
-##                blanck = blanck_picture(crop); 
-##                th3 = cv2.adaptiveThreshold(crop, 255, MG, T,11,5)
-##
-##                contours, _ = cv2.findContours(th3, R, P)
-##                for cnts in contours:
-##                    if cv2.contourArea(cnts) > 100:
-##                        #print(cv2.contourArea(cnts))
-##                        cv2.drawContours(blanck, [cnts], -1, (0,255,0), 1)
-##                        cv2.fillPoly(blanck, pts =[cnts], color=(255, 255, 255))
-##                        #show_picture("blanck", blanck, 0, "")
-##
-##                        blanck = make_line(blanck, 2, 0)
-##                        blanck1[y:y+size, x:x+size] = blanck
-##
-##                        blanck1[y:y+size, x:x+size] = make_line(blanck1[y:y+size, x:x+size], 2, (255, 255, 255))
-##
-##                
-##
-##        show_picture("blanck1", blanck1, 0, "")
-##
-##
-
-
-
-
-
-
+        
+        for cnts in contours:
+            if cv2.contourArea(cnts) != maxi and\
+               cv2.contourArea(cnts) > 10:
+                print(cv2.contourArea(cnts))
+                cv2.drawContours(blanck3,[cnts],-1,(255,255,255), 1)
+                (x, y, w, h) = cv2.boundingRect(cnts)
+                #print(x, y, w, h)
+                show_picture("blanck3", blanck3, 0, "")
 
 
