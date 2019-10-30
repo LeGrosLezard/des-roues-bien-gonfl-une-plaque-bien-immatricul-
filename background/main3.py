@@ -137,12 +137,15 @@ if __name__ == "__main__":
 
         for x in range(0, img.shape[0]):
             for y in range(0, img.shape[1]):
-                if img[x, y][0] < 60 and\
-                   img[x, y][1] < 60 and\
-                   img[x, y][2] < 60:
+                if img[x, y][0] < 50 and\
+                   img[x, y][1] < 50 and\
+                   img[x, y][2] < 50:
                     img[x, y] = 255, 0, 0
 
-
+                if img[x, y][0] > 180 and\
+                   img[x, y][1] > 180 and\
+                   img[x, y][2] > 180:
+                    img[x, y] = 0, 0, 255
 
         show_picture("img", img, 0, "")
 
