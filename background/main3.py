@@ -88,7 +88,7 @@ MM = cv2.ADAPTIVE_THRESH_MEAN_C
 MG = cv2.ADAPTIVE_THRESH_GAUSSIAN_C
 T = cv2.THRESH_BINARY
 
-R = cv2.RETR_EXTERNAL
+R = cv2.RETR_TREE
 P = cv2.CHAIN_APPROX_NONE
 
 
@@ -107,31 +107,26 @@ if __name__ == "__main__":
     for i in range(len(liste_image)):
 
         img = open_picture(path_image.format(liste_image[i]), 1)
+        
         height, width, channel = img.shape
         add_w = width % 10
         add_h = height % 10
 
-        img = cv2.resize(img, (width*2 + add_w, height*2 + add_h))
+        img = cv2.resize(img, (300, 300))
         height, width, channel = img.shape
 
-
-##        cv2.rectangle(img, (50, 50), (50+width-100, 50+height-80), 3)
-##
-##        show_picture("img", img, 0, "")
-
-
-
-
+        copy = img.copy()
 
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        rectangle = (50, 50, 50+width-100, 50+height-80)
+        rectangle = (20, 20, 50+width-100, 50+height-80)
 
         mask = np.zeros(image_rgb.shape[:2], np.uint8)
 
 
+    
+
         bgdModel = np.zeros((1, 65), np.float64)
         fgdModel = np.zeros((1, 65), np.float64)
-
 
 
         cv2.grabCut(image_rgb, # Our image
@@ -145,34 +140,51 @@ if __name__ == "__main__":
         # Create mask where sure and likely backgrounds set to 0, otherwise 1
         mask_2 = np.where((mask==2) | (mask==0), 0, 1).astype('uint8')
 
-        # Multiply image with new mask to subtract background
+
         image_rgb_nobg = image_rgb * mask_2[:, :, np.newaxis]
 
 
-        plt.imshow(image_rgb_nobg), plt.axis("off")
-        plt.show()
 
 
 
+        gray = cv2.cvtColor(image_rgb_nobg, cv2.COLOR_BGR2GRAY)
+        th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,1)
+        contours, _ = cv2.findContours(th3, R, P)
+
+
+        
+        blanck = blanck_picture(img);
+
+        maxi = 0
+        maxi1 = 0
+        for cnt in contours:
+            if cv2.contourArea(cnt) > maxi:
+                maxi = cv2.contourArea(cnt)
+            if cv2.contourArea(cnt) < maxi and\
+               cv2.contourArea(cnt) > maxi1:
+                maxi1 = cv2.contourArea(cnt)
 
 
 
+    
+        for cnts in contours:
+            if cv2.contourArea(cnts) == maxi1:
+                print(cv2.contourArea(cnts))
+                cv2.drawContours(blanck,[cnts],-1,(255,255,255), 1)
+                cv2.fillPoly(blanck, pts =[cnts], color=(255, 255, 255))
 
+                #show_picture("blanck", blanck, 0, "")
 
+        blanck = cv2.cvtColor(blanck, cv2.COLOR_BGR2GRAY)
+        for x in range(0, blanck.shape[0]):
+            for y in range(0, blanck.shape[1]):
+                if blanck[x,y] == 255:
+                    pass
+                else:
+                    copy[x,y] = 0
+                   
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        show_picture("copy", copy, 0, "")
 
 
 
