@@ -73,7 +73,7 @@ def main_color_background(img):
 
 
     for key, value in dico.items():
-        if value > max_value and key != (0, 255, 0):
+        if value > max_value and key != (0, 0, 0):
             max_value = value; color = key;
 
 
@@ -165,11 +165,8 @@ if __name__ == "__main__":
                 maxi1 = cv2.contourArea(cnt)
 
 
-
-    
         for cnts in contours:
             if cv2.contourArea(cnts) == maxi1:
-                print(cv2.contourArea(cnts))
                 cv2.drawContours(blanck,[cnts],-1,(255,255,255), 1)
                 cv2.fillPoly(blanck, pts =[cnts], color=(255, 255, 255))
 
@@ -185,6 +182,45 @@ if __name__ == "__main__":
                    
 
         show_picture("copy", copy, 0, "")
+
+
+        val = ()
+        for x in range(0, copy.shape[0]):
+
+            
+            for y in range(0, copy.shape[1]):
+                if copy[x,y][0] == 0 and\
+                   copy[x,y][1] == 0 and\
+                   copy[x,y][2] == 0:
+                    val == ()
+                else:
+                    print(copy[x,y], val)
+                    if val == ():
+                        val = copy[x,y]
+                    try:
+                        if copy[x,y][1] > val[0] + 50 or\
+                            copy[x,y][2] > val[1] + 50 or\
+                            copy[x,y][2] > val[2] + 50 or\
+                            copy[x,y][1] < val[0] - 50 or\
+                            copy[x,y][2] < val[1] - 50 or\
+                            copy[x,y][2] < val[2] - 50:
+                            copy[x,y] = 0, 0, 255
+                    except:
+                        pass
+
+                    show_picture("copy", copy, 1, "")
+
+            
+
+
+
+
+
+
+
+
+
+
 
 
 
