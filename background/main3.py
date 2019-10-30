@@ -42,14 +42,6 @@ def blanck_picture(img):
     return blank_image
 
 
-
-
-
-
-
-
-
-
 def adjust_gamma(image, gamma):
     """We add light to the video, we play with gamma"""
 
@@ -78,104 +70,60 @@ def main_color_background(img):
             dico[value] = 1
     return dico
 
+
+
+
+MM = cv2.ADAPTIVE_THRESH_MEAN_C
+MG = cv2.ADAPTIVE_THRESH_GAUSSIAN_C
+T = cv2.THRESH_BINARY
+
+R = cv2.RETR_EXTERNAL
+P = cv2.CHAIN_APPROX_NONE
+
+
 if __name__ == "__main__":
 
 
     path_folder_image = "image/"
     path_image = "image/{}"
-
-
-
     liste_image = os.listdir(path_folder_image)
 
 
+
+
+
+    size = 10
     for i in range(len(liste_image)):
 
         img = open_picture(path_image.format(liste_image[i]), 1)
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-        show_picture("gray", gray, 0, "")
-
-
-        dico1 = {}
-        dico = main_color_background(gray)
-        for key, value in dico.items():
-            dico1[key] = []
- 
-
-
-
-        v = 0
-
-        r = 0
-        g = 0
-        b = 0
-
-        bb = False
-        gg = False
-        t = 0
-
-        r_no = False
-        b_no = False
-        g_no = False
-        for key, value in dico1.items():
-            no = False
-            if key < v + 20 and key > v - 20:
-                no = True
-
-            v = key
-
-            value.append([b, g, r])
-
-
-
-
-            if no is True:
-                pass
-
-
-
-
-            else:
-                if r < 240 and r_no == False:
-                    r += 40
-
-                if r >= 240 and b < 240:
-                    b+=40
-
-                if b >= 240:
-                    g += 30
-
-                if g >= 240:
-                    r_no = True
-                    r = 0
-                    g = 0
-
-                if r_no == True and g >= 240:
-                    r += 50
-                    g += 10
-
-                
-                
-
-
-
-        t += 1
-        print(dico1)
-        print(len(dico1))
-
-
-        
-        for x in range(0, gray.shape[0]):
-            for y in range(0, gray.shape[1]):
-                for key, value in dico1.items():
- 
-                    if gray[x, y] == key:
-                        img[x, y] = value[0][0], value[0][1], value[0][2]
-                        break
-
-
         show_picture("img", img, 0, "")
+
+
+        for nb in range(1, 4):
+            #court image
+            for x in range(0, img.shape[1], size*nb):
+                for y in range(0, img.shape[0], size*nb):
+                    a = 0; b = 0; c = 0; d = 0;
+
+                    #5 par 5
+                    crop_in = img[y:y+size*nb, x:x+size*nb]
+                    #show_picture("crop_in", crop_in, 0, "")
+                    for i in crop_in.tolist():
+                        for j in i:
+
+                            #moyenne
+                            a += j[0]; b+=j[1];c+=j[2]
+                            d+=1
+
+                    if d != 0:
+
+                        #reatribut couleur
+                        img[y:y+size*nb, x:x+size*nb] = int(a/d), int(b/d), int(c/d)
+                        #show_picture("img", img, 0, "")
+
+            show_picture("imgpix", img, 0, "")
+
+
 
 
 
