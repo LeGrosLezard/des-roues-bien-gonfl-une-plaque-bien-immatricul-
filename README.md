@@ -1,10 +1,6 @@
 # des-roues-bien-gonflé-une-plaque-bien-immatriculé-
 
-faut mtn ajouter du contour pour etre sur d'avoir du background enfaite
-
-ok la c juste pour enlever le background pcque sinon on a pas la vitre ni les roues ni la différence de couleur, jcrois qu'on customiser sa voiture
-
-
+ptin
 
 
 
