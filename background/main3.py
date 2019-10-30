@@ -9,8 +9,9 @@ import time
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from skimage import exposure
-from skimage import feature
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
 
 
 def open_picture(image, mode):
@@ -106,132 +107,55 @@ if __name__ == "__main__":
     for i in range(len(liste_image)):
 
         img = open_picture(path_image.format(liste_image[i]), 1)
-        copy = img.copy()
+        height, width, channel = img.shape
+        add_w = width % 10
+        add_h = height % 10
 
-        show_picture("img", img, 0, "")
-
-
-        #court image
-        for x in range(0, img.shape[1], size):
-            for y in range(0, img.shape[0], size):
-                a = 0; b = 0; c = 0; d = 0;
-
-                #5 par 5
-                crop_in = img[y:y+size, x:x+size]
-                #show_picture("crop_in", crop_in, 0, "")
-                for i in crop_in.tolist():
-                    for j in i:
-
-                        #moyenne
-                        a += j[0]; b+=j[1];c+=j[2]
-                        d+=1
-
-                if d != 0:
-
-                    #reatribut couleur
-                    img[y:y+size, x:x+size] = int(a/d), int(b/d), int(c/d)
-                    #show_picture("img", img, 0, "")
+        img = cv2.resize(img, (width*2 + add_w, height*2 + add_h))
+        height, width, channel = img.shape
 
 
-        #show_picture("imgpix", img, 0, "")
+##        cv2.rectangle(img, (50, 50), (50+width-100, 50+height-80), 3)
+##
+##        show_picture("img", img, 0, "")
 
 
 
 
 
+        image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        rectangle = (50, 50, 50+width-100, 50+height-80)
 
-        size = 30
-
-
-        #court image
-        for x in range(0, img.shape[1], size):
-            for y in range(0, img.shape[0], size):
-                a = 0; b = 0; c = 0; d = 0;
-
-                #5 par 5
-                crop_in = img[y:y+size, x:x+size]
-                #show_picture("crop_in", crop_in, 0, "")
-                for i in crop_in.tolist():
-                    for j in i:
-
-                        #moyenne
-                        a += j[0]; b+=j[1];c+=j[2]
-                        d+=1
-
-                if d != 0:
-
-                    #reatribut couleur
-                    img[y:y+size, x:x+size] = int(a/d), int(b/d), int(c/d)
-                    #show_picture("img", img, 0, "")
+        mask = np.zeros(image_rgb.shape[:2], np.uint8)
 
 
-        show_picture("imgpix1", img, 0, "")
+        bgdModel = np.zeros((1, 65), np.float64)
+        fgdModel = np.zeros((1, 65), np.float64)
 
 
-        dico, _ = main_color_background(img)
 
-        print(dico)
+        cv2.grabCut(image_rgb, # Our image
+                    mask, # The Mask
+                    rectangle, # Our rectangle
+                    bgdModel, # Temporary array for background
+                    fgdModel, # Temporary array for background
+                    5, # Number of iterations
+                    cv2.GC_INIT_WITH_RECT) # Initiative using our rectangle
 
-        liste = []
-        for i in dico:
-            liste.append(i)
+        # Create mask where sure and likely backgrounds set to 0, otherwise 1
+        mask_2 = np.where((mask==2) | (mask==0), 0, 1).astype('uint8')
 
-        liste1 = []
-        for key, value in dico.items():
-            liste1.append(value)
-
-
-        dico1 = {}
-        for i in liste:
-            dico1[i] = 0
-
-        print(dico1)
+        # Multiply image with new mask to subtract background
+        image_rgb_nobg = image_rgb * mask_2[:, :, np.newaxis]
 
 
-        for i in liste:
-            for j in liste:
-                if i[0] > j[0] - 30 and\
-                   i[0] < j[0] + 30 and\
-                   i[1] > j[1] - 30 and\
-                   i[1] < j[1] + 30 and\
-                   i[2] > j[2] - 30 and\
-                   i[2] < j[2] + 30 and\
-                   i != j:
-                    for key, value in dico.items():
-                        if key == i:
-                            for key1, value1 in dico1.items():
-                                if key1 == key:
-                                    dico1[key1] = key
-                    liste.remove(j)
+        plt.imshow(image_rgb_nobg), plt.axis("off")
+        plt.show()
 
 
 
 
 
-        print("")        
-        print(dico1)
-
-                
-        print("")
-        print("")
-
-
-
-
-        for x in range(0, img.shape[0], size):
-            for y in range(0, img.shape[1], size):
-                for key1, value1 in dico1.items():
-
-                    if img[x, y][0] == key1[0] and\
-                       img[x, y][1] == key1[1] and\
-                       img[x, y][2] == key1[2]:
-                        if value1 == 0:
-                            img[x:x+30, y:y+30] = key1[0], key1[1], key1[2]
-
-                        else:
-                            img[x:x+30, y:y+30] = value1[0], value1[1], value1[2]
-
-                        show_picture("yoyo", img, 0, "")
 
 
 
