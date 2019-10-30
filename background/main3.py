@@ -42,59 +42,10 @@ def blanck_picture(img):
     return blank_image
 
 
-def main_color_background(img):
-    """
-        Here we recup the main color
-        by the recurrent pixel
-    """
-
-    dico = {}; max_value = 0; color = []
-
-    #Convert picture to array
-    im = Image.fromarray(img)
-    #data from array recup value pixels 
-    for value in im.getdata():
-        if value in dico.keys():
-            dico[value] += 1
-        else:
-            dico[value] = 1
-
-    #recup main pixel presence
-        #except for green pixels (use for our contours)
-    for key, value in dico.items():
-        if value > max_value and key[0] > 10 and key[1] > 10 and key[2] > 10:
-            max_value = value; color = key;
-
-    return color
 
 
-def main_color_background(img):
-    """
-        Here we recup the main color
-        by the recurrent pixel
-    """
-
-    dico = {}; max_value = 0; color = []
-
-    #Convert picture to array
-    im = Image.fromarray(img)
-    #data from array recup value pixels 
-    for value in im.getdata():
-        if value in dico.keys():
-            dico[value] += 1
-        else:
-            dico[value] = 1
 
 
-    liste = []
-    val = []
-    for key, value in dico.items():
-        if value > 5 and key != (0,0,0):
-            liste.append(key)
-            val.append(value)
-
-
-    return liste, val
 
 
 
@@ -109,7 +60,23 @@ def adjust_gamma(image, gamma):
     return cv2.LUT(image, table)
 
 
+def main_color_background(img):
+    """
+        Here we recup the main color
+        by the recurrent pixel
+    """
 
+    dico = {}; max_value = 0; color = []
+
+    #Convert picture to array
+    im = Image.fromarray(img)
+    #data from array recup value pixels 
+    for value in im.getdata():
+        if value in dico.keys():
+            dico[value] += 1
+        else:
+            dico[value] = 1
+    return dico
 
 if __name__ == "__main__":
 
@@ -119,44 +86,82 @@ if __name__ == "__main__":
 
 
 
-
-    MM = cv2.ADAPTIVE_THRESH_MEAN_C
-    MG = cv2.ADAPTIVE_THRESH_GAUSSIAN_C
-    T = cv2.THRESH_BINARY
-
-    R = cv2.RETR_EXTERNAL
-    P = cv2.CHAIN_APPROX_NONE
-
     liste_image = os.listdir(path_folder_image)
 
 
     for i in range(len(liste_image)):
 
         img = open_picture(path_image.format(liste_image[i]), 1)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        show_picture("gray", gray, 0, "")
 
 
-        for x in range(0, img.shape[0]):
-            for y in range(0, img.shape[1]):
-                if img[x, y][0] < 50 and\
-                   img[x, y][1] < 50 and\
-                   img[x, y][2] < 50:
-                    img[x, y] = 255, 0, 0
+        dico1 = {}
+        dico = main_color_background(gray)
+        for key, value in dico.items():
+            dico1[key] = []
 
-                if img[x, y][0] > 180 and\
-                   img[x, y][1] > 180 and\
-                   img[x, y][2] > 180:
-                    img[x, y] = 0, 0, 255
+        v = 0
 
-        show_picture("img", img, 0, "")
+        r = 0
+        g = 0
+        b = 0
+
+        bb = False
+        gg = False
+        t = 0
+
+        r_no = False
+        b_no = False
+        g_no = False
+        for key, value in dico1.items():
+            no = False
+            if key < v + 5 and key > v - 5:
+                no = True
+
+            v = key
+
+            value.append([b, g, r])
 
 
 
 
+            if no is True:
+                pass
 
 
 
 
+            else:
+                if r < 240:
+                    r += 20
+  
+                if r >= 240 and b <= 240:
+                    b += 20
 
+                if b >= 240:
+                    g += 20
+
+                if g >= 240:
+                    r = 0
+                    b = 0
+                    g = 0
+
+
+        t += 1
+        print(dico1)
+
+
+        
+        for x in range(0, gray.shape[0]):
+            for y in range(0, gray.shape[1]):
+                for key, value in dico1.items():
+                    if gray[x, y] == key:
+                        img[x, y] = value[0][0], value[0][1], value[0][2]
+
+
+                        show_picture("img", img, 0, "")
 
 
 
