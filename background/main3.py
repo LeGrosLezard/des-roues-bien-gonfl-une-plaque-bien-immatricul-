@@ -101,6 +101,9 @@ if __name__ == "__main__":
         dico = main_color_background(gray)
         for key, value in dico.items():
             dico1[key] = []
+ 
+
+
 
         v = 0
 
@@ -117,7 +120,7 @@ if __name__ == "__main__":
         g_no = False
         for key, value in dico1.items():
             no = False
-            if key < v + 5 and key > v - 5:
+            if key < v + 20 and key > v - 20:
                 no = True
 
             v = key
@@ -134,38 +137,45 @@ if __name__ == "__main__":
 
 
             else:
-                if r < 240:
-                    r += 20
-  
-                if r >= 240 and b <= 240:
-                    b += 20
+                if r < 240 and r_no == False:
+                    r += 40
+
+                if r >= 240 and b < 240:
+                    b+=40
 
                 if b >= 240:
-                    g += 20
+                    g += 30
 
                 if g >= 240:
+                    r_no = True
                     r = 0
-                    b = 0
                     g = 0
+
+                if r_no == True and g >= 240:
+                    r += 50
+                    g += 10
+
+                
+                
+
 
 
         t += 1
         print(dico1)
+        print(len(dico1))
 
 
         
         for x in range(0, gray.shape[0]):
             for y in range(0, gray.shape[1]):
                 for key, value in dico1.items():
+ 
                     if gray[x, y] == key:
                         img[x, y] = value[0][0], value[0][1], value[0][2]
+                        break
 
 
-                        show_picture("img", img, 0, "")
-
-
-
-
+        show_picture("img", img, 0, "")
 
 
 
