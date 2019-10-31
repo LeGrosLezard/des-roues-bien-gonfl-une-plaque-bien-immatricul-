@@ -1,8 +1,7 @@
 # des-roues-bien-gonflé-une-plaque-bien-immatriculé-
 
 
-
-j'ai vu torch j'ai essayé torch error to install ptin j'ai essayé toute les combinaison d'install jlavais installer et jlai desinstall je sais plus quand......
+y'a interet quyest idle sur anaconda
 
 
 
