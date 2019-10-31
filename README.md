@@ -2,7 +2,7 @@
 
 
 
-j'ai vu torch j'ai essayé torch error to install ptin j'ai essayé toute les combinaison d'install
+j'ai vu torch j'ai essayé torch error to install ptin j'ai essayé toute les combinaison d'install jlavais installer et jlai desinstall je sais plus quand......
 
 
 
