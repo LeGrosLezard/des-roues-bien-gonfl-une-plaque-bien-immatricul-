@@ -184,42 +184,112 @@ if __name__ == "__main__":
         show_picture("copy", copy, 0, "")
 
 
-        val = ()
-        for x in range(0, copy.shape[0]):
+        copy1 = copy.copy()
+        bordure = []
 
-            
+        for x in range(0, copy.shape[0]):
+  
             for y in range(0, copy.shape[1]):
                 if copy[x,y][0] == 0 and\
                    copy[x,y][1] == 0 and\
                    copy[x,y][2] == 0:
-                    val == ()
+                    val = ()
+
                 else:
-                    print(copy[x,y], val)
                     if val == ():
-                        val = copy[x,y]
-                    try:
-                        if copy[x,y][1] > val[0] + 50 or\
-                            copy[x,y][2] > val[1] + 50 or\
-                            copy[x,y][2] > val[2] + 50 or\
-                            copy[x,y][1] < val[0] - 50 or\
-                            copy[x,y][2] < val[1] - 50 or\
-                            copy[x,y][2] < val[2] - 50:
-                            copy[x,y] = 0, 0, 255
-                    except:
-                        pass
+                        val = copy[x, y]
+                        bordure.append(copy[x,y].tolist())
 
-                    show_picture("copy", copy, 1, "")
+                    if copy[x,y+1][0] == 0 and\
+                       copy[x,y+1][1] == 0 and\
+                       copy[x,y+1][1] == 0:
+                        bordure.append(copy[x,y].tolist())
 
-            
+                    
 
 
 
+        show_picture("copy", copy, 0, "")
+
+        
+##        print(len(bordure))
+##        for i in bordure:
+##            for j in bordure:
+##                if abs(i[0]-j[0]) < 10 and\
+##                   abs(i[1]-j[1]) < 20 and\
+##                   abs(i[2]-j[2]) < 20:
+##                    bordure.remove(j)
+##
+##
+        print(len(bordure))
+
+
+
+##        for x in range(0, copy.shape[0]):
+##            for y in range(0, copy.shape[1]):
+##                if copy[x,y][0] == 0 and\
+##                   copy[x,y][1] == 0 and\
+##                   copy[x,y][2] == 0:
+##                    pass
+##                else:
+##                    ok = False
+##                    for i in bordure:
+##                        #print(copy[x, y], i)
+##                        if copy[x, y][0] > i[0] - 8 and\
+##                           copy[x, y][0] < i[0] + 8 and\
+##                           copy[x, y][1] > i[1] - 8 and\
+##                           copy[x, y][1] < i[1] + 8 and\
+##                           copy[x, y][2] > i[2] - 8 and\
+##                           copy[x, y][2] < i[2] + 8 :
+##                            copy[x,y] = 0, 255, 0
+##                            ok = True
+##                            break
+##                    if ok is False:
+##                        copy[x,y] = 0, 0, 255
+##
+##        show_picture("copy", copy, 0, "")
+##
+##        
+##        cv2.imwrite("yoyo.png", copy)
+
+
+
+
+
+        img = open_picture("yoyo.png", 1)
+        show_picture("img", img, 0, "")
+        show_picture("copy1", copy1, 0, "")
+
+        for x in range(0, img.shape[0]):
+            for y in range(0, img.shape[1]):
+                if img[x,y][0] == 0 and\
+                   img[x,y][1] == 0 and\
+                   img[x,y][2] == 0:
+                    pass
+                else:
+
+                    if img[x, y][0] == 0 and\
+                        img[x, y][1] == 255 and\
+                        img[x, y][2] == 0:
+                        copy1[x, y] = 0, 0, 0
+
+        show_picture("copy1", copy1, 0, "")
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+                
 
 
 
