@@ -1,6 +1,6 @@
 # des-roues-bien-gonflé-une-plaque-bien-immatriculé-
 
-ptin
+jvoulais faire un active contour putin et sous les roues ca reste ou un object foreground, ou un superpixel la j'utilise un truk tout fait pfffffffffff
 
 
 
