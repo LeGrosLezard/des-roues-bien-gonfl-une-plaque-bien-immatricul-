@@ -81,7 +81,22 @@ def main_color_background(img):
 
 
 
+def rotation(img, degrees):
+    """
+        Rotation of the picture via his center
+    """
+    
+    rows = img.shape[0]
+    cols = img.shape[1]
 
+    img_center = (cols / 2, rows / 2)
+    M = cv2.getRotationMatrix2D(img_center, degrees, 1)
+
+    #Rotate picture with white border
+    rotated = cv2.warpAffine(img, M, (cols, rows), borderValue=(0,0,0))
+    #show_picture("rotated", rotated, 0, "y")
+
+    return rotated
 
 
 MM = cv2.ADAPTIVE_THRESH_MEAN_C
@@ -107,7 +122,10 @@ if __name__ == "__main__":
     for i in range(len(liste_image)):
 
         img = open_picture(path_image.format(liste_image[i]), 1)
+
         
+
+
         height, width, channel = img.shape
         add_w = width % 10
         add_h = height % 10
@@ -118,6 +136,7 @@ if __name__ == "__main__":
         copy = img.copy()
         ccopy = img.copy()
         ccopsy = img.copy()
+        yaya = img.copy()
 
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         rectangle = (20, 20, 50+width-100, 50+height-80)
@@ -154,7 +173,6 @@ if __name__ == "__main__":
         contours, _ = cv2.findContours(th3, R, P)
 
 
-        
         blanck = blanck_picture(img);
 
         maxi = 0
@@ -181,15 +199,17 @@ if __name__ == "__main__":
         blanck111 = cv2.erode(blanck,kernel,iterations = 1)
 
 
-
-
-
         blanck111 = cv2.morphologyEx(blanck111, cv2.MORPH_OPEN, kernel)
 
 
 
         blanck111 = cv2.cvtColor(blanck111, cv2.COLOR_BGR2GRAY)
-##
+
+        aa = blanck111.copy()
+
+
+
+
         for x in range(0, blanck111.shape[0]):
             for y in range(0, blanck111.shape[1]):
                 if blanck111[x,y] == 255:
@@ -203,18 +223,26 @@ if __name__ == "__main__":
 
 
 
+        aa = rotation(aa, -180)
 
 
+        kernel = np.ones((4,4),np.uint8)
+        aa = cv2.erode(aa,kernel,iterations = 2)
 
 
+        show_picture("blanck111", blanck111, 0, "")
+
+        aa = rotation(aa, 180)
+
+        for x in range(0, aa.shape[0]):
+            for y in range(0, aa.shape[1]):
+                if aa[x,y] == 255:
+                    pass
+                else:
+                    ccopsy[x,y] = 0
 
 
-
-
-
-
-
-
+        show_picture("zadza", ccopsy, 0, "")
 
 
 
