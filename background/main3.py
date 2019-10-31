@@ -137,6 +137,7 @@ if __name__ == "__main__":
         ccopy = img.copy()
         ccopsy = img.copy()
         yaya = img.copy()
+        cocopy = img.copy()
 
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         rectangle = (20, 20, 50+width-100, 50+height-80)
@@ -218,21 +219,23 @@ if __name__ == "__main__":
                     ccopsy[x,y] = 0
 
 
-        show_picture("ccopsy", ccopsy, 0, "")
+        #show_picture("ccopsy", ccopsy, 0, "")
+
+
+
+    
 
 
 
 
-        aa = rotation(aa, -180)
+
+        kernel = np.ones((2,2),np.uint8)
+        aa = cv2.erode(aa,kernel,iterations = 1)
 
 
-        kernel = np.ones((4,4),np.uint8)
-        aa = cv2.erode(aa,kernel,iterations = 2)
+        #show_picture("blanck111", blanck111, 0, "")
 
-
-        show_picture("blanck111", blanck111, 0, "")
-
-        aa = rotation(aa, 180)
+ 
 
         for x in range(0, aa.shape[0]):
             for y in range(0, aa.shape[1]):
@@ -256,6 +259,50 @@ if __name__ == "__main__":
 
 
 
+        gray = cv2.cvtColor(ccopsy, cv2.COLOR_BGR2GRAY)
+        th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,5)
+
+
+
+        maxi = 0
+        maxi1 = 0
+        for cnt in contours:
+            if cv2.contourArea(cnt) > maxi:
+                maxi = cv2.contourArea(cnt)
+            if cv2.contourArea(cnt) < maxi and\
+               cv2.contourArea(cnt) > maxi1:
+                maxi1 = cv2.contourArea(cnt)
+
+                
+
+        blanck2 = blanck_picture(img);
+        blanck2 = cv2.cvtColor(blanck2, cv2.COLOR_BGR2GRAY)
+
+
+        for cnts in contours:
+            if cv2.contourArea(cnts) == maxi or\
+               cv2.contourArea(cnts) == maxi1:
+                #print(cv2.contourArea(cnts))
+                cv2.drawContours(blanck2,[cnts],-1,(255,255,255), 10)
+                #cv2.fillPoly(blanck2, pts =[cnts], color=(255, 255, 255))
+
+
+
+        show_picture("blanck2", blanck2, 0, "")
+
+
+        kernel = np.ones((1,1),np.uint8)
+        blanck2 = cv2.erode(blanck2,kernel,iterations = 1)
+
+        show_picture("vcxv", blanck2, 0, "")
+
+        for x in range(0, blanck2.shape[0]):
+            for y in range(0, blanck2.shape[1]):
+                if blanck2[x, y] == 255:
+                    ccopsy[x,y] = 0, 0, 0
+
+
+        show_picture("ccopsy", ccopsy, 0, "")
 
 
 
