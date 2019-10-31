@@ -199,11 +199,13 @@ if __name__ == "__main__":
                     if val == ():
                         val = copy[x, y]
                         bordure.append(copy[x,y].tolist())
+                        bordure.append(copy[x,y+1].tolist())
 
                     if copy[x,y+1][0] == 0 and\
                        copy[x,y+1][1] == 0 and\
                        copy[x,y+1][1] == 0:
                         bordure.append(copy[x,y].tolist())
+                        bordure.append(copy[x,y+1].tolist())
 
                     
 
@@ -212,16 +214,7 @@ if __name__ == "__main__":
         show_picture("copy", copy, 0, "")
 
         
-##        print(len(bordure))
-##        for i in bordure:
-##            for j in bordure:
-##                if abs(i[0]-j[0]) < 10 and\
-##                   abs(i[1]-j[1]) < 20 and\
-##                   abs(i[2]-j[2]) < 20:
-##                    bordure.remove(j)
-##
-##
-        print(len(bordure))
+
 
 
 
@@ -279,6 +272,25 @@ if __name__ == "__main__":
 
 
 
+
+
+
+
+        gray = cv2.cvtColor(copy1, cv2.COLOR_BGR2GRAY)
+        th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,5)
+        contours, _ = cv2.findContours(th3, R, P)
+
+
+        blanck24 = blanck_picture(img);
+
+
+        for cnts in contours:
+            if cv2.contourArea(cnts):
+                print(cv2.contourArea(cnt))
+                cv2.drawContours(blanck24,[cnts],-1,(255,255,255), 1)
+                #cv2.fillPoly(blanck2, pts =[cnts], color=(255, 255, 255))
+
+                show_picture("blanck24", blanck24, 0, "")
 
 
 
