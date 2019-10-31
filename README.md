@@ -2,7 +2,7 @@
 
 
 
-j'ai vu torch j'ai essayé torch
+j'ai vu torch j'ai essayé torch error to install ptin j'ai essayé toute les combinaison d'install
 
 
 
