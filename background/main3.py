@@ -73,7 +73,7 @@ def main_color_background(img):
 
 
     for key, value in dico.items():
-        if value > max_value and key != (0, 0, 0):
+        if value > max_value and key != (0):
             max_value = value; color = key;
 
 
@@ -116,6 +116,8 @@ if __name__ == "__main__":
         height, width, channel = img.shape
 
         copy = img.copy()
+        ccopy = img.copy()
+        ccopsy = img.copy()
 
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         rectangle = (20, 20, 50+width-100, 50+height-80)
@@ -172,125 +174,31 @@ if __name__ == "__main__":
 
                 #show_picture("blanck", blanck, 0, "")
 
-        blanck = cv2.cvtColor(blanck, cv2.COLOR_BGR2GRAY)
-        for x in range(0, blanck.shape[0]):
-            for y in range(0, blanck.shape[1]):
-                if blanck[x,y] == 255:
+
+
+
+        kernel = np.ones((6,6),np.uint8)
+        blanck111 = cv2.erode(blanck,kernel,iterations = 1)
+
+
+
+
+
+        blanck111 = cv2.morphologyEx(blanck111, cv2.MORPH_OPEN, kernel)
+
+
+
+        blanck111 = cv2.cvtColor(blanck111, cv2.COLOR_BGR2GRAY)
+##
+        for x in range(0, blanck111.shape[0]):
+            for y in range(0, blanck111.shape[1]):
+                if blanck111[x,y] == 255:
                     pass
                 else:
-                    copy[x,y] = 0
-                   
-
-        show_picture("copy", copy, 0, "")
+                    ccopsy[x,y] = 0
 
 
-        copy1 = copy.copy()
-        bordure = []
-
-        for x in range(0, copy.shape[0]):
-  
-            for y in range(0, copy.shape[1]):
-                if copy[x,y][0] == 0 and\
-                   copy[x,y][1] == 0 and\
-                   copy[x,y][2] == 0:
-                    val = ()
-
-                else:
-                    if val == ():
-                        val = copy[x, y]
-                        bordure.append(copy[x,y].tolist())
-                        bordure.append(copy[x,y+1].tolist())
-
-                    if copy[x,y+1][0] == 0 and\
-                       copy[x,y+1][1] == 0 and\
-                       copy[x,y+1][1] == 0:
-                        bordure.append(copy[x,y].tolist())
-                        bordure.append(copy[x,y+1].tolist())
-
-                    
-
-
-
-        show_picture("copy", copy, 0, "")
-
-        
-
-
-
-
-##        for x in range(0, copy.shape[0]):
-##            for y in range(0, copy.shape[1]):
-##                if copy[x,y][0] == 0 and\
-##                   copy[x,y][1] == 0 and\
-##                   copy[x,y][2] == 0:
-##                    pass
-##                else:
-##                    ok = False
-##                    for i in bordure:
-##                        #print(copy[x, y], i)
-##                        if copy[x, y][0] > i[0] - 8 and\
-##                           copy[x, y][0] < i[0] + 8 and\
-##                           copy[x, y][1] > i[1] - 8 and\
-##                           copy[x, y][1] < i[1] + 8 and\
-##                           copy[x, y][2] > i[2] - 8 and\
-##                           copy[x, y][2] < i[2] + 8 :
-##                            copy[x,y] = 0, 255, 0
-##                            ok = True
-##                            break
-##                    if ok is False:
-##                        copy[x,y] = 0, 0, 255
-##
-##        show_picture("copy", copy, 0, "")
-##
-##        
-##        cv2.imwrite("yoyo.png", copy)
-
-
-
-
-
-        img = open_picture("yoyo.png", 1)
-        show_picture("img", img, 0, "")
-        show_picture("copy1", copy1, 0, "")
-
-        for x in range(0, img.shape[0]):
-            for y in range(0, img.shape[1]):
-                if img[x,y][0] == 0 and\
-                   img[x,y][1] == 0 and\
-                   img[x,y][2] == 0:
-                    pass
-                else:
-
-                    if img[x, y][0] == 0 and\
-                        img[x, y][1] == 255 and\
-                        img[x, y][2] == 0:
-                        copy1[x, y] = 0, 0, 0
-
-        show_picture("copy1", copy1, 0, "")
-
-
-
-
-
-
-
-
-
-        gray = cv2.cvtColor(copy1, cv2.COLOR_BGR2GRAY)
-        th3 = cv2.adaptiveThreshold(gray, 255, MG, T,11,5)
-        contours, _ = cv2.findContours(th3, R, P)
-
-
-        blanck24 = blanck_picture(img);
-
-
-        for cnts in contours:
-            if cv2.contourArea(cnts):
-                print(cv2.contourArea(cnt))
-                cv2.drawContours(blanck24,[cnts],-1,(255,255,255), 1)
-                #cv2.fillPoly(blanck2, pts =[cnts], color=(255, 255, 255))
-
-                show_picture("blanck24", blanck24, 0, "")
+        show_picture("ccopsy", ccopsy, 0, "")
 
 
 
@@ -301,7 +209,22 @@ if __name__ == "__main__":
 
 
 
-                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
