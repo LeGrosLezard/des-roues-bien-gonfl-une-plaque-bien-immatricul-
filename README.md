@@ -1,5 +1,7 @@
 remove background
 
+faire un slider avec grabcut et présenter les objets tel quel sinon
+
 finir 
 
 truk de rosalba
