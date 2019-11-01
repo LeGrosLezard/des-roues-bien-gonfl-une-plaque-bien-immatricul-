@@ -123,7 +123,7 @@ if __name__ == "__main__":
 
         img = open_picture(path_image.format(liste_image[i]), 1)
 
-        
+
 
 
         height, width, channel = img.shape
@@ -133,14 +133,46 @@ if __name__ == "__main__":
         img = cv2.resize(img, (300, 300))
         height, width, channel = img.shape
 
+        #show_picture("img", img, 0, "")
+
+        
         copy = img.copy()
         ccopy = img.copy()
         ccopsy = img.copy()
         yaya = img.copy()
         cocopy = img.copy()
 
+        dzadazda= img.copy()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         image_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        
         rectangle = (20, 20, 50+width-100, 50+height-80)
+
+
 
         mask = np.zeros(image_rgb.shape[:2], np.uint8)
 
@@ -156,7 +188,7 @@ if __name__ == "__main__":
                     rectangle, # Our rectangle
                     bgdModel, # Temporary array for background
                     fgdModel, # Temporary array for background
-                    5, # Number of iterations
+                    10, # Number of iterations
                     cv2.GC_INIT_WITH_RECT) # Initiative using our rectangle
 
         # Create mask where sure and likely backgrounds set to 0, otherwise 1
@@ -164,6 +196,29 @@ if __name__ == "__main__":
 
 
         image_rgb_nobg = image_rgb * mask_2[:, :, np.newaxis]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -193,12 +248,13 @@ if __name__ == "__main__":
 
                 #show_picture("blanck", blanck, 0, "")
 
+        #show_picture("blanck", blanck, 0, "")
 
 
-
-        kernel = np.ones((6,6),np.uint8)
+        kernel = np.ones((4,4),np.uint8)
         blanck111 = cv2.erode(blanck,kernel,iterations = 1)
 
+        #show_picture("blanck", blanck, 0, "")
 
         blanck111 = cv2.morphologyEx(blanck111, cv2.MORPH_OPEN, kernel)
 
@@ -245,10 +301,7 @@ if __name__ == "__main__":
                     ccopsy[x,y] = 0
 
 
-        show_picture("zadza", ccopsy, 0, "")
-
-
-
+        #show_picture("zadza", ccopsy, 0, "")
 
 
 
@@ -288,13 +341,13 @@ if __name__ == "__main__":
 
 
 
-        show_picture("blanck2", blanck2, 0, "")
+        #show_picture("blanck2", blanck2, 0, "")
 
 
         kernel = np.ones((1,1),np.uint8)
         blanck2 = cv2.erode(blanck2,kernel,iterations = 1)
 
-        show_picture("vcxv", blanck2, 0, "")
+        #show_picture("vcxv", blanck2, 0, "")
 
         for x in range(0, blanck2.shape[0]):
             for y in range(0, blanck2.shape[1]):
@@ -302,9 +355,14 @@ if __name__ == "__main__":
                     ccopsy[x,y] = 0, 0, 0
 
 
-        show_picture("ccopsy", ccopsy, 0, "")
+        show_picture("zadza", ccopsy, 0, "")
 
 
 
 
 
+
+
+
+
+        
