@@ -1,17 +1,13 @@
 remove background
 
-faire un slider avec grabcut et présenter les objets tel quel sinon
+récupérer l'objet dans un carré
 
-finir 
+récupéré tout sauf l'objet -< original
 
-truk de rosalba
+sur tous les coté récupérer la couleur 
 
-synergo j'attend
+effacer si couleur meme
 
-essayer de faire une nouvelle technique
+sinon
 
----------------------------------------------------
-
-roue bien gonflé, plaque bien immatriculée je le ferai sur des vidéo
-
-finir jojo (doc, j'ai oublié de write le label)
+effacer si couleur moyenne
